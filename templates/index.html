@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Zen Reader</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo-pixel">
+                ■ ZEN_READ
+            </div>
+            <button class="btn-pixel" id="btn-upload" onclick="triggerUploadPDF()">
+                MỞ FILE PDF
+            </button>
+            <div class="sidebar-footer">
+                v1.0.0_offline
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h2>TỦ SÁCH CỦA BẠN</h2>
+                <p>Chọn một cuốn sách để tiếp tục hành trình đọc không sao nhãng.</p>
+            </header>
+
+            <div class="books-grid" id="books-grid">
+                <div class="empty-state" id="empty-state">
+                    <p>Chưa có sách nào. Hãy bấm "MỞ FILE PDF" ở bên trái để thêm sách!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

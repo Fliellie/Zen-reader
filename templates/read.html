@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Mode - Đọc Chống Sao Nhãng</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="zen-body" id="zen-body">
+
+    <header class="zen-header">
+        <button class="btn-pixel btn-small" onclick="goBackToLibrary()">
+            ◁ TỦ SÁCH
+        </button>
+        
+        <div class="zen-controls">
+            <select id="font-selector" class="pixel-select" onchange="changeFont(this.value)">
+                <option value="'Courier New', monospace">FONT: PIXEL</option>
+                <option value="sans-serif">FONT: TỐI GIẢN</option>
+                <option value="Georgia, serif">FONT: SÁCH GIẤY</option>
+            </select>
+
+            <button class="btn-pixel btn-small btn-ctrl" onclick="adjustFontSize(4)">A+</button>
+            <button class="btn-pixel btn-small btn-ctrl" onclick="adjustFontSize(-4)">A-</button>
+
+            <button id="theme-toggle-btn" class="btn-pixel btn-small btn-ctrl" onclick="toggleTheme()">👁 ĐÊM</button>
+        </div>
+    </header>
+
+    <main class="zen-container">
+        <button class="btn-pixel btn-side" onclick="prevSentence()">◀</button>
+        
+        <div class="zen-center-content">
+            <div class="book-title-indicator" id="book-title-indicator">Tên sách đang tải...</div>
+            <div class="sentence-box" id="sentence-box">Đang tải nội dung sách...</div>
+            <div class="sentence-counter" id="sentence-counter">[ DÒNG: 0 / 0 ]</div>
+        </div>
+
+        <button class="btn-pixel btn-side" onclick="nextSentence()">▶</button>
+    </main>
+
+    <script src="read.js"></script>
+</body>
+</html>

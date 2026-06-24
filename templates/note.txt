@@ -1,0 +1,11 @@
+giao diện này sẽ gồm các chức năng sau: thanh điều khiển bên trái là nút : mở file pdf của bạn
+tôi sẽ viết css và js ra file riêng
+index.css
+index.js
+toàn phần còn lại là chia ra các ô chữ nhật để sau tôi sẽ cho các sách đang đọc vào đó
+css tông màu cam trắng
+style nút bấm pixel
+js: mở python lên
+python : mở trình chọn fiel, chỉ chấp nhận file pdf
+chọn rồi: chuyển sang text và có thể lưu sang 1 thư mục nào đó
+lưu local địa chỉ của file đó, dòng đang đọc, ban đầu là 0

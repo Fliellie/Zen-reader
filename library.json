@@ -1,0 +1,14 @@
+{
+    "document_for_reader": {
+        "title": "document-for-reader",
+        "original_path": "/home/enix/Documents/distract-reader/document-for-reader.pdf",
+        "txt_path": "extracted_books/document_for_reader.txt",
+        "current_index": 1
+    },
+    "_thao_tung_tam_ly_nhan_dien_thuc_tinh_va_chua_lanh_nhung_ton_thuong_tiem_an": {
+        "title": "_thao-tung-tam-ly-nhan-dien-thuc-tinh-va-chua-lanh-nhung-ton-thuong-tiem-an",
+        "original_path": "/home/enix/Downloads/_thao-tung-tam-ly-nhan-dien-thuc-tinh-va-chua-lanh-nhung-ton-thuong-tiem-an.pdf",
+        "txt_path": "extracted_books/_thao_tung_tam_ly_nhan_dien_thuc_tinh_va_chua_lanh_nhung_ton_thuong_tiem_an.txt",
+        "current_index": 134
+    }
+}
