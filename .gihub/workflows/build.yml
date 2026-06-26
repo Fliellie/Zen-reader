@@ -3,20 +3,20 @@ name: Build Windows App
 on:
   push:
     tags:
-      - 'v*' # Chạy tự động khi bạn tạo một tag mới (Ví dụ: v1.0.0, v1.0.1)
+      - 'v*' # Sẽ bắt các tag dạng v1.0, v0.0.1, v2.1.3...
 
 jobs:
   build-windows:
-    runs-on: windows-latest # Yêu cầu GitHub chạy trên máy ảo Windows
+    runs-on: windows-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/checkout@v4
+      uses: actions/setup-python@v5 # ĐÃ SỬA CHUẨN: Dùng setup-python thay vì checkout
       with:
-        python-version: '3.10' # Hoặc phiên bản Python bạn đang dùng
+        python-version: '3.10'
 
     - name: Install Dependencies
       run: |
@@ -26,7 +26,6 @@ jobs:
     - name: Build with PyInstaller
       run: |
         pyinstaller --onefile --windowed --add-data "templates;templates" app.py
-      # Lưu ý: Trên máy ảo Windows của GitHub, lệnh add-data phải dùng dấu chấm phẩy ";"
 
     - name: Create Release and Upload Asset
       uses: softprops/action-gh-release@v1
