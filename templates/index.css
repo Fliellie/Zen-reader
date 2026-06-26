@@ -1,295 +1,5 @@
 /* ==========================================================================
-   RESET & PIXEL BASE STYLES
-   ========================================================================== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    /* Dùng font monospace mặc định của máy để tạo cảm giác retro/lập trình */
-    font-family: 'Courier New', Courier, monospace; 
-    font-weight: bold;
-}
-
-body {
-    background-color: #FFF9F6; /* Màu trắng kem pha cam cực dịu mắt */
-    color: #222222;
-    height: 100vh;
-    overflow: hidden;
-}
-
-/* Khung chính chia 2 cột: Sidebar và Main Content */
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-}
-
-/* ==========================================================================
-   SIDEBAR (Thanh điều khiển bên trái)
-   ========================================================================== */
-.sidebar {
-    width: 260px;
-    background-color: #FFFFFF;
-    border-right: 4px solid #000000; /* Viền pixel dày */
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.logo-pixel {
-    font-size: 20px;
-    color: #FF5722; /* Màu cam chủ đạo */
-    border: 3px solid #000000;
-    padding: 10px;
-    background: #FFF;
-    box-shadow: 4px 4px 0px #000000; /* Đổ bóng khối pixel */
-    margin-bottom: 40px;
-    width: 100%;
-    text-align: center;
-}
-
-.sidebar-footer {
-    font-size: 12px;
-    color: #888888;
-}
-
-/* ==========================================================================
-   MAIN CONTENT (Vùng tủ sách bên phải)
-   ========================================================================== */
-.main-content {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-.main-header {
-    margin-bottom: 40px;
-    border-bottom: 4px dashed #FFBB99; /* Đường gạch đứt màu cam nhạt */
-    padding-bottom: 20px;
-}
-
-.main-header h2 {
-    font-size: 28px;
-    color: #FF5722;
-    margin-bottom: 10px;
-}
-
-.main-header p {
-    color: #666666;
-    font-size: 14px;
-}
-
-/* Lưới chứa các ô sách hình chữ nhật */
-.books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 25px;
-    align-content: start;
-}
-
-/* Ô chữ nhật chứa sách */
-.book-card {
-    background-color: #FFFFFF;
-    border: 4px solid #000000;
-    padding: 20px;
-    box-shadow: 6px 6px 0px #FFA480; /* Đổ bóng màu cam */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 160px;
-    transition: transform 0.1s;
-}
-
-.book-title {
-    font-size: 16px;
-    color: #000000;
-    word-break: break-word;
-    margin-bottom: 15px;
-    line-height: 1.4;
-}
-
-.book-progress {
-    font-size: 13px;
-    color: #FF5722;
-    margin-bottom: 15px;
-    background: #FFF3EE;
-    padding: 4px 8px;
-    border: 2px dashed #FF5722;
-    display: inline-block;
-}
-
-/* Trạng thái khi chưa có sách */
-.empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px;
-    border: 4px dashed #000000;
-    background: #FFFFFF;
-    color: #888888;
-}
-
-/* ==========================================================================
-   STYLE NÚT BẤM PIXEL (RETRO BUTTONS)
-   ========================================================================== */
-.btn-pixel {
-    display: inline-block;
-    width: 100%;
-    background-color: #FF5722; /* Nút màu cam */
-    color: #FFFFFF;
-    border: 4px solid #000000;
-    padding: 12px;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 4px 4px 0px #000000; /* Bóng đen pixel dày */
-    outline: none;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-/* Hiệu ứng di chuột vào nút */
-.btn-pixel:hover {
-    background-color: #FF7043;
-}
-
-/* Hiệu ứng giật/lún xuống khi click chuẩn 8-bit */
-.btn-pixel:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px #000000;
-}
-
-/* Nút đọc tiếp trong thẻ sách (màu trắng viền đen cho đỡ chói) */
-.btn-read-now {
-    background-color: #FFFFFF;
-    color: #000000;
-    box-shadow: 3px 3px 0px #000000;
-    padding: 8px;
-    font-size: 12px;
-}
-.btn-read-now:hover {
-    background-color: #FFF3EE;
-}
-.btn-read-now:active {
-    transform: translate(3px, 3px);
-    box-shadow: 0px 0px 0px #000000;
-}
-
-
-
-/* ==========================================================================
-   ZEN MODE UPGRADE - LAYOUT CHỮ TO GIỮA MÀN HÌNH
-   ========================================================================== */
-.zen-body {
-    background-color: #FFF9F6;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.zen-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-    border-bottom: 4px solid #000000;
-    background: #FFFFFF;
-}
-
-.zen-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.pixel-select {
-    border: 3px solid #000000;
-    padding: 5px 10px;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    background: white;
-    outline: none;
-}
-
-.btn-small {
-    width: auto !important;
-    padding: 6px 15px !important;
-    font-size: 13px !important;
-}
-
-.btn-ctrl {
-    box-shadow: 2px 2px 0px #000000 !important;
-}
-.btn-ctrl:active {
-    transform: translate(2px, 2px) !important;
-    box-shadow: 0px 0px 0px #000000 !important;
-}
-
-/* Khung chính chia làm 3 cột: [Nút trái] [Chữ ở giữa] [Nút phải] */
-.zen-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    position: relative;
-}
-
-/* 2 nút điều hướng bên rìa màn hình */
-.btn-side {
-    width: 60px !important;
-    height: 60px;
-    font-size: 24px !important;
-    padding: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-/* Khu vực chữ ở giữa */
-.zen-center-content {
-    flex: 1;
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 300px;
-}
-
-.book-title-indicator {
-    font-size: 14px;
-    color: #888888;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
-
-/* Ô chữ KHỔNG LỒ */
-.sentence-box {
-    font-size: 36px; /* Kích thước chữ siêu to mặc định */
-    line-height: 1.5;
-    color: #000000;
-    word-break: break-word;
-    margin-bottom: 30px;
-    transition: font-size 0.1s ease;
-}
-
-.sentence-counter {
-    font-size: 14px;
-    color: #FF5722;
-    background: #FFF3EE;
-    padding: 4px 12px;
-    border: 2px dashed #FF5722;
-    display: inline-block;
-}
-/* ==========================================================================
-   MÀU SẮC ĐỘNG (VARIABLE THEMES)
+   1. ROOT VARIABLES & THEMES (Hệ thống màu nguyên bản)
    ========================================================================== */
 :root {
     /* Chế độ SÁNG (Mặc định) */
@@ -302,23 +12,232 @@ body {
     --counter-text: #FF5722;
     --counter-border: #FF5722;
     --header-bg: #FFFFFF;
+    
+    --primary-orange: #FF5722;
+    --primary-hover: #FF7043;
+    --shadow-orange: #FFA480;
 }
 
 body.dark-mode {
-    /* Chế độ ĐÊM (Khi kích hoạt class .dark-mode) */
-    --bg-color: #121212;        /* Nền đen sâu chống mỏi mắt */
-    --text-color: #FF5722;      /* Tiêu đề màu cam neon rực rỡ */
-    --box-bg: #1E1E1E;         /* Khung chứa câu màu xám tối */
-    --box-text: #FFFFFF;       /* Chữ trong câu màu trắng tinh */
-    --box-border: #FF5722;     /* Viền khung chuyển sang màu cam pixel */
+    /* Chế độ ĐÊM */
+    --bg-color: #121212;        
+    --text-color: #FF5722;      
+    --box-bg: #1E1E1E;         
+    --box-text: #FFFFFF;       
+    --box-border: #FF5722;     
     --counter-bg: #2A140E;
     --counter-text: #FF7043;
     --counter-border: #FF7043;
     --header-bg: #1A1A1A;
+    
+    --primary-orange: #FF5722;
+    --primary-hover: #FF7043;
+    --shadow-orange: #2A140E;
 }
 
 /* ==========================================================================
-   CẬP NHẬT CẤU TRÚC THEO BIẾN MÀU
+   2. RESET & PIXEL BASE STYLES
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    
+    /* Hệ thống font chữ hiện đại, tự động dùng font đẹp nhất của từng OS */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Trả về độ đậm vừa phải, không bị ép bold toàn bộ trang gây xôi thịt */
+    font-weight: 500; 
+    
+    /* BẬT LẠI làm mịn chữ, giúp nét chữ mượt mà, đọc truyện lâu không mỏi mắt */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   3. MAIN LAYOUT (Giao diện tủ sách chính)
+   ========================================================================== */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar bên trái */
+.sidebar {
+    width: 260px;
+    background-color: #FFFFFF;
+    border-right: 4px solid #000000;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-pixel {
+    font-size: 20px;
+    color: var(--primary-orange);
+    border: 4px solid #000000;
+    padding: 12px;
+    background: #FFFFFF;
+    box-shadow: 4px 4px 0px #000000;
+    margin-bottom: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.sidebar-footer {
+    font-size: 12px;
+    color: #888888;
+}
+
+/* Vùng nội dung bên phải */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.main-header {
+    margin-bottom: 40px;
+    border-bottom: 4px dashed #FFBB99;
+    padding-bottom: 20px;
+}
+
+.main-header h2 {
+    font-size: 28px;
+    color: var(--primary-orange);
+    margin-bottom: 10px;
+}
+
+.main-header p {
+    color: #323030;
+    font-size: 30px;
+}
+
+/* Lưới hiển thị danh sách sách */
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+    align-content: start;
+}
+
+.book-card {
+    background-color: #FFFFFF;
+    border: 4px solid #000000;
+    padding: 20px;
+    box-shadow: 6px 6px 0px var(--shadow-orange);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 160px;
+    transition: transform 0.1s ease;
+}
+
+.book-title {
+    font-size: 16px;
+    color: #000000;
+    word-break: break-word;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.book-progress {
+    font-size: 13px;
+    color: var(--primary-orange);
+    margin-bottom: 15px;
+    background: #FFF3EE;
+    padding: 4px 8px;
+    border: 2px dashed var(--primary-orange);
+    display: inline-block;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    border: 4px dashed #000000;
+    background: #FFFFFF;
+    color: #888888;
+}
+
+/* ==========================================================================
+   4. RETRO PIXEL BUTTONS (Hệ thống nút bấm hoạt hình)
+   ========================================================================== */
+.btn-pixel {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--primary-orange);
+    color: #000000;
+    border: 4px solid #000000;
+    padding: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000000;
+    outline: none;
+    text-align: center;
+    text-transform: uppercase;
+    transition: background-color 0.1s;
+    
+}
+
+.btn-pixel:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-pixel:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #000000;
+}
+
+/* Nút đọc ngay trong thẻ sách */
+.btn-read-now {
+    background-color: #FFFFFF;
+    color: #000000;
+    box-shadow: 4px 4px 0px #000000;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.btn-read-now:hover {
+    background-color: #FFF3EE;
+}
+
+.btn-read-now:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #000000;
+}
+
+/* Nút nhỏ điều khiển ở Header */
+.btn-small {
+    width: auto !important;
+    padding: 6px 15px !important;
+    font-size: 13px !important;
+}
+
+.btn-ctrl {
+    box-shadow: 3px 3px 0px #000000 !important;
+}
+
+.btn-ctrl:active {
+    transform: translate(3px, 3px) !important;
+    box-shadow: 0px 0px 0px #000000 !important;
+}
+
+/* ==========================================================================
+   5. ZEN MODE (Giao diện đọc tập trung cao cấp)
    ========================================================================== */
 .zen-body {
     background-color: var(--bg-color);
@@ -327,7 +246,7 @@ body.dark-mode {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: background-color 0.2s, color 0.2s; /* Hiệu ứng chuyển màu mượt */
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .zen-header {
@@ -339,27 +258,94 @@ body.dark-mode {
     background: var(--header-bg);
 }
 
-/* Ô chữ KHỔNG LỒ ở giữa */
-.sentence-box {
-    font-size: 36px;
-    line-height: 1.5;
-    background-color: var(--box-bg);
-    color: var(--box-text);
-    border: 4px solid var(--box-border);
-    padding: 40px;
-    box-shadow: 6px 6px 0px var(--box-border);
-    word-break: break-word;
-    margin-bottom: 30px;
-    max-width: 100%;
-    transition: all 0.2s ease;
+.zen-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
-/* Bộ đếm số dòng */
-.sentence-counter {
+.pixel-select {
+    border: 4px solid #000000;
+    padding: 6px 10px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    background: #FFFFFF;
+    outline: none;
+    box-shadow: 2px 2px 0px #000000;
+    cursor: pointer;
+}
+
+/* Khung gom cụm: [Nút Trái] <-> [Nội dung chữ giữa] <-> [Nút Phải] */
+.zen-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Giữ các phần tử tập trung ở giữa */
+    gap: 30px;               /* Khoảng cách vừa phải giữa nút và khối chữ */
+    padding: 0 20px;
+    
+    /* THAY ĐỔI QUAN TRỌNG: */
+    width: 100%;
+    max-width: 95vw;         /* Nới rộng không gian tối đa lên 95% hiển thị màn hình */
+    margin: 0 auto;
+}
+
+/* 2 nút điều hướng lớn ở rìa ô chữ */
+.btn-side {
+    width: 64px !important;
+    height: 64px;
+    font-size: 24px !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;          /* Tránh nút bị méo khi thu nhỏ màn hình */
+}
+
+/* Vùng chứa nội dung chữ ở giữa */
+.zen-center-content {
+    /* Loại bỏ flex: 1 để khối chữ không bị ép phải giãn đều cố định, 
+       mà sẽ co giãn HOÀN TOÀN tự nhiên theo độ lớn của font chữ */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    
+    /* Khống chế vùng hiển thị chữ tối đa để không bị dính sát sạt vào nút */
+    max-width: calc(100% - 140px); 
+}
+
+.book-title-indicator {
     font-size: 14px;
+    color: #888888;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Ô chữ KHỔNG LỒ (Đã làm sạch, xóa border/shadow) */
+.sentence-box {
+    font-size: 36px; 
+    line-height: 1.6;
+    color: var(--box-text);
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 10px 0; /* Bỏ padding ngang để chữ tận dụng hết biên */
+    word-break: break-word;
+    margin-bottom: 25px;
+    width: 100%;
+    transition: font-size 0.1s ease, color 0.2s ease;
+}
+
+/* Bộ đếm số câu/dòng dạng nhãn pixel mượt mà */
+.sentence-counter {
+    font-size: 30px;
     color: var(--counter-text);
     background: var(--counter-bg);
-    border: 2px dashed var(--counter-border);
-    padding: 4px 12px;
+    border: 3px dashed var(--counter-border); /* Tăng độ dày đường nét đứt hoạt hình */
+    padding: 6px 16px;
     display: inline-block;
 }

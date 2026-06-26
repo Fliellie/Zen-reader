@@ -1,22 +1,31 @@
 import os
 import json
 import re
+import sys
 import webview
 import pypdf
 
-TXT_FOLDER = "extracted_books"  
-DATA_FILE = "library.json"      
+# ==========================================================================
+# CẤU HÌNH ĐƯỜNG DẪN TUYỆT ĐỐI (Fix lỗi khi đóng gói .exe)
+# ==========================================================================
+if getattr(sys, 'frozen', False):
+    BASE_DIR = sys._MEIPASS
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+WORKING_DIR = os.getcwd()
+TXT_FOLDER = os.path.join(WORKING_DIR, "extracted_books")  
+DATA_FILE = os.path.join(WORKING_DIR, "library.json")      
 
 if not os.path.exists(TXT_FOLDER):
     os.makedirs(TXT_FOLDER)
 
+
 class ReadingAppBridge:
     def __init__(self):
-        # Biến bộ nhớ tạm dùng để ghi nhớ ID cuốn sách người dùng vừa ấn "ĐỌC TIẾP"
         self.active_book_id = ""
 
     def get_library(self):
-        """Đọc và trả về danh sách sách từ file library.json cho JS hiển thị"""
         if os.path.exists(DATA_FILE):
             try:
                 with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -26,7 +35,6 @@ class ReadingAppBridge:
         return {}
 
     def open_pdf_dialog(self):
-        """Mở hộp thoại chọn file PDF -> Chuyển sang TXT -> Lưu thông tin local"""
         file_types = ('PDF Files (*.pdf)',)
         file_path = webview.windows[0].create_file_dialog(webview.OPEN_DIALOG, file_types=file_types)
         
@@ -45,7 +53,6 @@ class ReadingAppBridge:
                 if text:
                     text_content += text + " "
             
-            # Xóa các khoảng trắng thừa, dồn dòng lỗi của PDF lại thành một mạch chữ liền
             text_content = re.sub(r'\s+', ' ', text_content).strip()
             
             txt_filename = f"{book_id}.txt"
@@ -64,26 +71,30 @@ class ReadingAppBridge:
             with open(DATA_FILE, "w", encoding="utf-8") as f:
                 json.dump(library, f, ensure_ascii=False, indent=4)
                 
-            return {"status": "success", "library": library}
+            # ĐÃ SỬA: Thêm lại new_book_id để JS gọi lệnh switch_to_reader mượt mà
+            return {"status": "success", "library": library, "new_book_id": book_id}
             
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    # ==========================================================================
-    # CÁC HÀM MỚI BỔ SUNG ĐỂ SỬA LỖI CHUYỂN TRANG
-    # ==========================================================================
-
     def set_active_book(self, book_id):
-        """Nhận lệnh từ index.js để ghi nhớ cuốn sách sắp đọc trước khi đổi trang"""
         self.active_book_id = book_id
         return True
 
     def get_active_book(self):
-        """Trả về ID cuốn sách đang đọc cho màn hình read.html nhận diện khi vừa load xong"""
         return self.active_book_id
 
+    def switch_to_reader(self):
+        read_html_path = os.path.join(BASE_DIR, 'templates', 'read.html')
+        webview.windows[0].load_url(read_html_path)
+        return True
+
+    def switch_to_home(self):
+        index_html_path = os.path.join(BASE_DIR, 'templates', 'index.html')
+        webview.windows[0].load_url(index_html_path)
+        return True
+
     def load_book_sentences(self, book_id):
-        """Đọc file .txt tương ứng và băm nhỏ thành mảng các câu để gửi lên màn hình đọc"""
         library = self.get_library()
         if book_id not in library:
             return {"status": "error", "message": "Không tìm thấy sách trong tủ sách!"}
@@ -98,7 +109,6 @@ class ReadingAppBridge:
             with open(txt_path, "r", encoding="utf-8") as f:
                 text = f.read()
             
-            # Thuật toán cắt câu dựa vào các dấu kết thúc: ., ?, !
             sentences = re.split(r'(?<=[.!?])\s+', text)
             sentences = [s.strip() for s in sentences if s.strip()]
             
@@ -112,7 +122,6 @@ class ReadingAppBridge:
             return {"status": "error", "message": str(e)}
 
     def save_progress(self, book_id, current_index):
-        """Lưu tiến độ dòng đang đọc dở mỗi khi người dùng bấm Next/Back"""
         library = self.get_library()
         if book_id in library:
             library[book_id]["current_index"] = int(current_index)
@@ -124,10 +133,11 @@ class ReadingAppBridge:
 
 if __name__ == '__main__':
     bridge = ReadingAppBridge()
+    start_html_path = os.path.join(BASE_DIR, 'templates', 'index.html')
     
     window = webview.create_window(
         'Pixel Zen Reader', 
-        'templates/index.html', 
+        start_html_path, 
         js_api=bridge,
         width=1000,
         height=650,

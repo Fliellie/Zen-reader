@@ -1,19 +1,28 @@
 import os
 import json
 import re
+import sys
 import webview
 import pypdf
 
-# 1. Tự động tạo thư mục lưu trữ sách nếu chưa có
-STORAGE_DIR = "extracted_books"
+# ==========================================================================
+# CẤU HÌNH ĐƯỜNG DẪN THỰC TẾ TRÊN Ổ ĐĨA
+# ==========================================================================
+if getattr(sys, 'frozen', False):
+    BASE_DIR = sys._MEIPASS
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# library.json và extracted_books sẽ nằm cùng nơi với file .exe hoặc file app.py chạy chính
+WORKING_DIR = os.getcwd()
+STORAGE_DIR = os.path.join(WORKING_DIR, "extracted_books")
+DATA_FILE = os.path.join(WORKING_DIR, "library.json")
+
 if not os.path.exists(STORAGE_DIR):
     os.makedirs(STORAGE_DIR)
 
-DATA_FILE = "library.json"
-
 class LibraryBridge:
     def __init__(self):
-        # Biến bộ nhớ tạm để ghi nhớ ID cuốn sách người dùng chọn "ĐỌC TIẾP"
         self.active_book_id = ""
 
     def get_library(self):
@@ -46,7 +55,6 @@ class LibraryBridge:
                 if text:
                     text_content += text + " "
             
-            # Làm sạch khoảng trắng thừa giúp thuật toán cắt câu chuẩn hơn
             text_content = re.sub(r'\s+', ' ', text_content).strip()
             
             txt_filename = f"{book_id}.txt"
@@ -70,10 +78,6 @@ class LibraryBridge:
             
         except Exception as e:
             return {"status": "error", "message": str(e)}
-
-    # ==========================================================================
-    # CÁC HÀM BỔ SUNG ĐỂ KẾT NỐI VỚI read.html VÀ read.js
-    # ==========================================================================
 
     def set_active_book(self, book_id):
         """Ghi nhớ sách đang được chọn để đọc"""
@@ -100,7 +104,6 @@ class LibraryBridge:
             with open(txt_path, "r", encoding="utf-8") as f:
                 text = f.read()
             
-            # Cắt câu bằng dấu chấm, hỏi, than
             sentences = re.split(r'(?<=[.!?])\s+', text)
             sentences = [s.strip() for s in sentences if s.strip()]
             
@@ -123,13 +126,27 @@ class LibraryBridge:
             return {"status": "saved"}
         return {"status": "not_found"}
 
+    def switch_to_reader(self):
+        """Hàm chuyển sang màn hình đọc (read.html) mà không cần server"""
+        read_html_path = os.path.join(BASE_DIR, 'templates', 'read.html')
+        webview.windows[0].load_url(read_html_path)
+        return True
+        
+    def switch_to_home(self):
+        """Hàm quay lại màn hình tủ sách (index.html)"""
+        index_html_path = os.path.join(BASE_DIR, 'templates', 'index.html')
+        webview.windows[0].load_url(index_html_path)
+        return True
+
 
 if __name__ == '__main__':
+    index_html_path = os.path.join(BASE_DIR, 'templates', 'index.html')
+
     bridge = LibraryBridge()
     
     window = webview.create_window(
         'Pixel Zen Reader', 
-        'templates/index.html', 
+        index_html_path,  
         js_api=bridge,
         width=1000,
         height=650,

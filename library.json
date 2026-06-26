@@ -10,5 +10,23 @@
         "original_path": "/home/enix/Downloads/_thao-tung-tam-ly-nhan-dien-thuc-tinh-va-chua-lanh-nhung-ton-thuong-tiem-an.pdf",
         "txt_path": "extracted_books/_thao_tung_tam_ly_nhan_dien_thuc_tinh_va_chua_lanh_nhung_ton_thuong_tiem_an.txt",
         "current_index": 134
+    },
+    "Homo_Deus___L__c_S__T__ng_Lai___khoahoctamlinh_vn": {
+        "title": "Homo Deus - Lược Sử Tương Lai - khoahoctamlinh.vn",
+        "original_path": "/home/enix/Downloads/Homo Deus - Lược Sử Tương Lai - khoahoctamlinh.vn.pdf",
+        "txt_path": "extracted_books/Homo_Deus___L__c_S__T__ng_Lai___khoahoctamlinh_vn.txt",
+        "current_index": 408
+    },
+    "_so_do": {
+        "title": "_so-do",
+        "original_path": "/home/enix/Downloads/_so-do.pdf",
+        "txt_path": "extracted_books/_so_do.txt",
+        "current_index": 151
+    },
+    "Ban_Khong_Thong_Minh_Lam_Dau___David_McRaney": {
+        "title": "Ban Khong Thong Minh Lam Dau - David McRaney",
+        "original_path": "/home/enix/Downloads/Ban Khong Thong Minh Lam Dau - David McRaney.pdf",
+        "txt_path": "extracted_books/Ban_Khong_Thong_Minh_Lam_Dau___David_McRaney.txt",
+        "current_index": 217
     }
 }
