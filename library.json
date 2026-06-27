@@ -28,5 +28,17 @@
         "original_path": "/home/enix/Downloads/Ban Khong Thong Minh Lam Dau - David McRaney.pdf",
         "txt_path": "extracted_books/Ban_Khong_Thong_Minh_Lam_Dau___David_McRaney.txt",
         "current_index": 217
+    },
+    "yt_10OJhIc_-vw": {
+        "title": "[YouTube] YouTube_10OJhIc_-vw",
+        "original_path": "https://youtu.be/10OJhIc_-vw?si=CkmKER7moyicje5j",
+        "txt_path": "extracted_books/yt_10OJhIc_-vw.txt",
+        "current_index": 18
+    },
+    "yt_XsZ_gP0gVJw": {
+        "title": "[YouTube] YouTube_XsZ_gP0gVJw",
+        "original_path": "https://youtu.be/XsZ_gP0gVJw?si=doC-Pm3eB41-RM0C",
+        "txt_path": "extracted_books/yt_XsZ_gP0gVJw.txt",
+        "current_index": 226
     }
 }

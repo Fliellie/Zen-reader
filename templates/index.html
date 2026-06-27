@@ -19,8 +19,11 @@
             <button class="btn-pixel" id="btn-upload" onclick="triggerUploadPDF()">
                 MỞ FILE PDF
             </button>
+            <button class="btn-pixel" id="btn-upload" onclick="handleCreateYoutubeBook()">
+                XEM VIDEO NGOẠI NGỮ
+            </button>
             <div class="sidebar-footer">
-                v1.0.0_offline
+                v1.0.6_offline
             </div>
         </aside>
 
@@ -36,6 +39,30 @@
                 </div>
             </div>
         </main>
+    </div>
+    <div id="youtube-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content-pixel">
+            <h3>■ TẠO SÁCH TỪ YOUTUBE</h3>
+            <p class="modal-desc">Nhập link video ngoại ngữ để trích xuất phụ đề bài học.</p>
+            
+            <div class="input-group-pixel">
+                <label>ĐƯỜNG DẪN VIDEO:</label>
+                <input type="text" id="youtube-link-input" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+
+            <div class="input-group-pixel">
+                <label>NGÔN NGỮ CỦA BẠN (NGƯỜI ĐỌC):</label>
+                <select id="lang-select">
+                    <option value="vi">Tiếng Việt (Dịch nội dung tiếng Anh sang tiếng Việt)</option>
+                    <option value="en">Tiếng Anh (Giữ nguyên phụ đề tiếng Anh để luyện đọc)</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-pixel btn-confirm" onclick="submitYoutubeRequest()">BẮT ĐẦU</button>
+                <button class="btn-pixel btn-cancel" onclick="closeYoutubeModal()">HỦY</button>
+            </div>
+        </div>
     </div>
 
     <script src="index.js"></script>

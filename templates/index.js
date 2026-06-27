@@ -148,3 +148,54 @@ function backToLibrary() {
     document.getElementById("main-library-view").style.display = "flex";
     document.getElementById("main-reader-view").style.display = "none";
 }
+// đây là index.js
+// hàm dùng để xử lí phần tạo sách từ video trên youtube
+// đầu tiên mở 1 của sổ mới đè lên index.html
+// trong cửa sổ hỏi người dùng nhập link video youtube
+// chọn ngôn ngữ [Anh, việt]- tức là bạn là người anh hay việt
+// nhấn oke để bắt đầu quá trình
+// gửi yêu cầu cho file app.py
+// Ví dụ khi người dùng nhấn nút khởi chạy trong popup nhập liệu
+function handleCreateYoutubeBook() {
+    document.getElementById('youtube-modal').style.display = 'flex';
+}
+// 2. Hàm đóng cửa sổ popup khi người dùng bấm Hủy
+function closeYoutubeModal() {
+    document.getElementById('youtube-modal').style.display = 'none';
+    document.getElementById('youtube-link-input').value = ""; // Xóa text cũ đi
+}
+
+// 3. Hàm kích hoạt khi người dùng nhấn nút "BẮT ĐẦU" trong popup
+async function submitYoutubeRequest() {
+    const youtubeUrl = document.getElementById('youtube-link-input').value; 
+    const userLang = document.getElementById('lang-select').value; 
+    const btnConfirm = document.querySelector('.btn-confirm');
+
+    if (!youtubeUrl) {
+        alert("Vui lòng nhập link YouTube!");
+        return;
+    }
+
+    // Đóng băng nút bấm tạm thời để tránh bấm nhiều lần
+    btnConfirm.innerText = "ĐANG XỬ LÝ...";
+    btnConfirm.style.pointerEvents = "none";
+
+    try {
+        // Gửi yêu cầu xuống Python xử lý ngầm
+        const response = await pywebview.api.create_book_from_youtube(youtubeUrl, userLang);
+        
+        if (response.status === "success") {
+            alert("Tạo sách từ YouTube thành công!");
+            closeYoutubeModal();
+            loadLibrary(); // Tải lại tủ sách để thấy cuốn sách YouTube xuất hiện
+        } else {
+            alert("Lỗi: " + response.message);
+        }
+    } catch (err) {
+        alert("Lỗi kết nối Python: " + err);
+    } finally {
+        // Mở khóa lại nút bấm
+        btnConfirm.innerText = "BẮT ĐẦU";
+        btnConfirm.style.pointerEvents = "auto";
+    }
+}
