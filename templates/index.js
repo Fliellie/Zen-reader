@@ -49,19 +49,23 @@ async function loadLibrary() {
     removeOldCards(booksGrid);         // Dọn dẹp các ô sách cũ để xếp loạt mới lên
     
     // Duyệt qua từng mã sách để vẽ "tấm card" cho cuốn sách đó
-    bookIds.forEach(id => {
-        const book = library[id]; // Lấy thông tin chi tiết (Tiêu đề, tiến độ...)
-        const card = document.createElement('div'); // Tạo một ô vuông mới bằng code
-        card.className = 'book-card'; // Đặt tên lớp là 'book-card' để CSS làm đẹp
-        
-        // Bỏ chữ, thông tin tiến độ và nút "ĐỌC TIẾP" vào trong ô vuông
-        card.innerHTML = `
-            <div class="book-title">${book.title}</div>
-            <div class="book-progress">Dòng hiện tại: ${book.current_index}</div>
-            <button class="btn-pixel btn-read-now" onclick="startReading('${id}')">ĐỌC TIẾP</button>
-        `;
-        booksGrid.appendChild(card); // Thêm ô vuông vừa tạo vào vùng hiển thị trên màn hình
-    });
+    // Thay thế đoạn vòng lặp bookIds.forEach(id => { ... }) cũ bằng đoạn này:
+bookIds.forEach(id => {
+    const book = library[id]; // Lấy thông tin chi tiết (Tiêu đề, tiến độ...)
+    const card = document.createElement('div'); // Tạo một ô vuông mới
+    card.className = 'book-card'; // Đặt tên lớp là 'book-card'
+    
+    // Bỏ chữ, thông tin tiến độ và THÊM CỤM NÚT ĐIỀU KHIỂN (Đọc tiếp & Xóa)
+    card.innerHTML = `
+        <div class="book-title">${book.title}</div>
+        <div class="book-progress">Dòng hiện tại: ${book.current_index}</div>
+        <div class="book-actions" style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-pixel btn-read-now" onclick="startReading('${id}')" style="flex: 1;">ĐỌC TIẾP</button>
+            <button class="btn-pixel btn-delete" onclick="deleteBook('${id}', '${book.title.replace(/'/g, "\\'")}')" style="background-color: #ff4d4d; color: white;">XÓA</button>
+        </div>
+    `;
+    booksGrid.appendChild(card); // Thêm ô vuông vào vùng hiển thị
+});
 }
 
 // Hàm phụ: Giống như việc quét dọn kệ sách cũ, xóa hết các ô chữ nhật cũ đi để tránh bị trùng lặp
@@ -197,5 +201,28 @@ async function submitYoutubeRequest() {
         // Mở khóa lại nút bấm
         btnConfirm.innerText = "BẮT ĐẦU";
         btnConfirm.style.pointerEvents = "auto";
+    }
+}
+// ==========================================================================
+// CHỨC NĂNG MỚI: XÓA SÁCH KHỎI THƯ VIỆN
+// ==========================================================================
+async function deleteBook(bookId, bookTitle) {
+    // Hiện bảng hỏi xác nhận kiểu cổ điển (Confirm Dialog)
+    const confirmDelete = confirm(`Bạn có chắc chắn muốn xóa cuốn sách "${bookTitle}" không?\nHành động này không thể hoàn tác!`);
+    
+    if (confirmDelete) {
+        try {
+            // Gọi hàm delete_book dưới Python (tí nữa bạn sẽ thêm hàm này vào app.py)
+            const response = await pywebview.api.delete_book(bookId);
+            
+            if (response.status === 'success') {
+                alert("Đã xóa sách thành công!");
+                loadLibrary(); // Xóa xong xuôi thì vẽ lại thư viện mới
+            } else {
+                alert("Lỗi khi xóa sách: " + response.message);
+            }
+        } catch (err) {
+            alert("Lỗi kết nối Python khi xóa: " + err);
+        }
     }
 }

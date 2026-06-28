@@ -217,6 +217,38 @@ class ReadingAppBridge:
 
         except Exception as e:
             return {"status": "error", "message": f"Hệ thống gặp lỗi: {str(e)}"}
+    # --- 6. Tính năng Xóa Sách ---
+    def delete_book(self, book_id):
+        """Xóa hoàn toàn file text của sách trong extracted_books và xóa khỏi library.json"""
+        try:
+            library = self.get_library()
+            
+            # Kiểm tra xem mã sách có tồn tại trong thư viện không
+            if book_id not in library:
+                return {"status": "error", "message": "Không tìm thấy cuốn sách này trong thư viện!"}
+            
+            book_info = library[book_id]
+            txt_path = book_info.get("txt_path")
+
+            # 1. Tiến hành xóa file .txt trong thư mục extracted_books (nếu có)
+            if txt_path and os.path.exists(txt_path):
+                try:
+                    os.remove(txt_path)
+                except Exception as file_err:
+                    # Nếu file đang bị khóa hoặc lỗi không xóa được file vật lý, vẫn ghi nhận để xử lý tiếp
+                    print(f"Không thể xóa file text: {file_err}")
+
+            # 2. Xóa cuốn sách ra khỏi dữ liệu JSON
+            del library[book_id]
+
+            # 3. Ghi đè lại file library.json sau khi xóa
+            with open(DATA_FILE, "w", encoding="utf-8") as f:
+                json.dump(library, f, ensure_ascii=False, indent=4)
+
+            return {"status": "success"}
+
+        except Exception as e:
+            return {"status": "error", "message": f"Lỗi hệ thống khi xóa: {str(e)}"}
 # ==========================================================================
 # 🚀 KHỞI CHẠY ỨNG DỤNG
 # ==========================================================================
