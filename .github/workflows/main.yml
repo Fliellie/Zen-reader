@@ -1,18 +1,40 @@
-name: Build Ubuntu App
+name: Build and Release Multi-Platform
 
 on:
   push:
-    branches:
-      - main     # Kích hoạt khi push code lên nhánh main
     tags:
-      - 'v*'
+      - 'v*' # Kích hoạt khi bạn push tag phiên bản mới (Ví dụ: v1.0.3)
 
 jobs:
-  build-ubuntu:
-    runs-on: ubuntu-latest
+  build-and-release:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            app_name: MyApp-Windows
+            file_path: dist/MyApp-Windows.exe
+            pyinstaller_args: --add-data "templates;templates" --icon="app.ico"
+            pip_packages: pywebview pyinstaller pypdf youtube-transcript-api deep-translator
+            
+          - os: ubuntu-latest
+            app_name: MyApp-Ubuntu
+            # Đổi file đẩy lên Release thành file .tar.gz
+            file_path: dist/MyApp-Ubuntu.tar.gz
+            pyinstaller_args: >-
+              --add-data "templates:templates"
+              --hidden-import=qtpy
+              --hidden-import=PyQt5
+              --hidden-import=PyQt5.QtCore
+              --hidden-import=PyQt5.QtWidgets
+              --hidden-import=PyQt5.QtWebEngineWidgets
+              --hidden-import=webview.platforms.qt
+            pip_packages: pywebview pyinstaller pypdf youtube-transcript-api deep-translator qtpy PyQt5 PyQtWebEngine
 
     steps:
-    # Bước 1: Lấy code từ kho lưu trữ về máy ảo Ubuntu
+    # Bước 1: Lấy code
     - name: Checkout Code
       uses: actions/checkout@v4
 
@@ -22,22 +44,27 @@ jobs:
       with:
         python-version: '3.10'
 
-    # Bước 3: Cài đặt các thư viện Python cần thiết
+    # Bước 3: Cài đặt thư viện
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pywebview pyinstaller pypdf youtube-transcript-api deep-translator
+        pip install ${{ matrix.pip_packages }}
 
-    # Bước 4: Đóng gói ứng dụng bằng PyInstaller (Sử dụng dấu : chuẩn Linux và bỏ --icon do Linux không hỗ trợ nhúng icon vào binary)
+    # Bước 4: Đóng gói ứng dụng
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile --windowed --add-data "templates:templates" app.py
+        pyinstaller --onefile --windowed --name="${{ matrix.app_name }}" ${{ matrix.pyinstaller_args }} app.py
 
-    # Bước 5: Tự động tạo Release và đẩy file chạy Linux lên khi tạo tags (Ví dụ: v1.0.0)
-    - name: Create Release and Upload Asset
+    # Bước 5: Nén file thành .tar.gz (Chỉ chạy bước này trên máy ảo Ubuntu)
+    - name: Compress Ubuntu Binary to TAR.GZ
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        tar -czvf dist/MyApp-Ubuntu.tar.gz -C dist MyApp-Ubuntu
+
+    # Bước 6: Đẩy file lên GitHub Release (Tự nhận diện file .exe của Windows hoặc .tar.gz của Ubuntu)
+    - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/') # Chỉ chạy bước này khi bạn push tag dạng v*
       with:
-        files: dist/app
+        files: ${{ matrix.file_path }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
