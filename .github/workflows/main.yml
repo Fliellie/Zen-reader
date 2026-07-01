@@ -1,4 +1,4 @@
-name: Build Windows App
+name: Build Ubuntu App
 
 on:
   push:
@@ -8,36 +8,36 @@ on:
       - 'v*'
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
+  build-ubuntu:
+    runs-on: ubuntu-latest
 
     steps:
-    # Bước 1: Lấy code từ kho lưu trữ về máy ảo
+    # Bước 1: Lấy code từ kho lưu trữ về máy ảo Ubuntu
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # Bước 2: Phải thiết lập Python trước khi làm mọi việc khác
+    # Bước 2: Thiết lập Python
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # Bước 3: Cài đặt toàn bộ thư viện cần thiết (Gộp làm 1 bước sạch sẽ)
+    # Bước 3: Cài đặt các thư viện Python cần thiết
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pywebview pyinstaller pypdf youtube-transcript-api deep-translator
 
-    # Bước 4: Đóng gói ứng dụng bằng PyInstaller (Sử dụng dấu ; chuẩn Windows)
+    # Bước 4: Đóng gói ứng dụng bằng PyInstaller (Sử dụng dấu : chuẩn Linux và bỏ --icon do Linux không hỗ trợ nhúng icon vào binary)
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile --windowed --add-data "templates;templates" --icon="app.ico" app.py
+        pyinstaller --onefile --windowed --add-data "templates:templates" app.py
 
-    # Bước 5: Tự động tạo Release và đẩy file exe lên khi bạn tạo tags (Ví dụ: v1.0.0)
+    # Bước 5: Tự động tạo Release và đẩy file chạy Linux lên khi tạo tags (Ví dụ: v1.0.0)
     - name: Create Release and Upload Asset
-      uses: softprops/action-gh-release@v2 # Nâng cấp lên v2 cho ổn định và bảo mật
+      uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/') # Chỉ chạy bước này khi bạn push tag dạng v*
       with:
-        files: dist/app.exe
+        files: dist/app
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
